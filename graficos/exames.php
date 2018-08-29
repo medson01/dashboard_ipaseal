@@ -194,7 +194,7 @@ $(function () {
                         $qtd[$x] = $row [qtd]; 
 						            $mes[$x] = $row [mes];
                                     
-                        echo "'".$mes_extenso[$row[mes]]."'," ; 
+                        echo "'".$mes2[$x]."'," ; 
                         
                      $x++;         
                      }

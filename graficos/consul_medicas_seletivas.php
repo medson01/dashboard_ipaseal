@@ -174,9 +174,9 @@ $(function () {
 
                     while( $row = pg_fetch_array( $sql01 ) ) {
                         $qtd[$x] = $row [qtd]; 
-						            $mes[$x] = $row [mes];
+						$mes[$x] = $row [mes];
                                     
-                        echo "'".$mes_extenso[$row[mes]]."'," ; 
+                        echo "'".$mes2[$x]."'," ; 
                         
                      $x++;         
                      }
@@ -253,10 +253,10 @@ $(function () {
                     echo "[".$qtd[$y] ."],";
                 }      
         }
-// alteração
+
                 echo "[".$constotal."],";
 
-// ***           
+          
 ?>    
             ]
         }]
@@ -282,22 +282,22 @@ $(function () {
   		if($y <> $linha){
 				 		
 						echo "<td>".$mes2[$y]."</td>" ;  
-// Alreração
+
              $aa =  $mes2[$y];
-// ****
+
 				 }else{
 				 		 echo "<td><font color='green'>".$mes2[$y]."</font></td>";	
-// Alteração
+
              $bb = $mes2[$y];
-// ****
+
 						 	
 				 }
                      
   }     
   		
-// Alteração     
-       echo "<td><font color='blue'>".$mes_extenso[date("m")]."</font></td>"; 
-// ***
+    	
+         echo "<td><font color='blue'>".$mes_extenso[date("m")]."</font></td>"; 
+
   		 echo "<td>Total</td>" ;
 		 $y=$y-1;
 
