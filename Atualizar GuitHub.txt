@@ -1,0 +1,4 @@
+git add --all
+git commit -m time
+git remote add origin https://github.com/medson01/dashboard_ipaseal.git
+git push -u origin master

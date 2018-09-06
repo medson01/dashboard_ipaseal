@@ -23,9 +23,9 @@
         '06' => 'Junho',
         '07' => 'Julho',
         '08' => 'Agosto',
-        '09' => 'Novembro',
-        '10' => 'Setembro',
-        '11' => 'Outubro',
+        '09' => 'Setembro',
+        '10' => 'Outubro',
+        '11' => 'Novembro',
         '12' => 'Dezembro'
     );    
 	$mes2 = array(
@@ -37,9 +37,9 @@
         '6' => 'Junho',
         '7' => 'Julho',
         '8' => 'Agosto',
-        '9' => 'Novembro',
-        '10' => 'Setembro',
-        '11' => 'Outubro',
+        '9' => 'Setembro',
+        '10' => 'Outubro',
+        '11' => 'Novembro',
         '12' => 'Dezembro'
     );        
             
@@ -171,7 +171,8 @@ $(function () {
 
                     $x=1;
 					
-
+                    $mesAtual = $linha + 1;
+                    
                     while( $row = pg_fetch_array( $sql01 ) ) {
                         $qtd[$x] = $row [qtd]; 
 						$mes[$x] = $row [mes];
@@ -180,9 +181,9 @@ $(function () {
                         
                      $x++;         
                      }
-// alteração
-                     echo "'".$mes_extenso[date("m")]."',"
-// ******
+
+                     echo "'".$mes2[$mesAtual]."',"
+
             ?>
             ],
             title: {
@@ -294,9 +295,9 @@ $(function () {
 				 }
                      
   }     
-  		
+  		  
     	
-         echo "<td><font color='blue'>".$mes_extenso[date("m")]."</font></td>"; 
+         echo "<td><font color='blue'>".$mes2[$mesAtual]."</font></td>"; 
 
   		 echo "<td>Total</td>" ;
 		 $y=$y-1;

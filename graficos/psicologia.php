@@ -14,7 +14,7 @@
 	
 	
 
-      $mes_extenso = array(
+   $mes_extenso = array(
         '01' => 'Janeiro',
         '02' => 'Fevereiro',
         '03' => 'Março',
@@ -23,12 +23,12 @@
         '06' => 'Junho',
         '07' => 'Julho',
         '08' => 'Agosto',
-        '09' => 'Novembro',
-        '10' => 'Setembro',
-        '11' => 'Outubro',
+        '09' => 'Setembro',
+        '10' => 'Outubro',
+        '11' => 'Novembro',
         '12' => 'Dezembro'
     );    
-	$mes2 = array(
+  $mes2 = array(
         '1' => 'Janeiro',
         '2' => 'Fevereiro',
         '3' => 'Marco',
@@ -37,11 +37,11 @@
         '6' => 'Junho',
         '7' => 'Julho',
         '8' => 'Agosto',
-        '9' => 'Novembro',
-        '10' => 'Setembro',
-        '11' => 'Outubro',
+        '9' => 'Setembro',
+        '10' => 'Outubro',
+        '11' => 'Novembro',
         '12' => 'Dezembro'
-    );        
+    );       
             
        $sql01=pg_query($conexao,"select mes, quantidade as qtd from fato_procedimento 
 								inner join dim_tempo on dim_tempo.id_tempo = fato_procedimento.id_tempo 
