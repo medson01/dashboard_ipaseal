@@ -1,4 +1,16 @@
-# dashboard_ipaseal
+RESUMO:
+# Pasta local ainda não configurada:
+git init
+git add --all
+git commit -m "comentário"
+git remote add origin https://github.com/medson01/dashboard_ipaseal.git
+git push origin master
+
+# Pasta local já configurada, apenas para atualizações:
+git add --all
+git commit -m "comentário"
+git remote add origin https://github.com/medson01/dashboard_ipaseal.git
+git push origin master
 
 # Iniciar as configurações para o Git em uma pasta para repositório:
 > git init
@@ -15,10 +27,8 @@ Adiciona apenas um arquivo
 # Confirma as alterações feitas e fechar os arquivos que serão enviados:
 > git commit -m "comentário"
 
-# Após executar os passos anteriores e criar um repositório no site do GitHub.com e obter com isso a URL do repositorio no Git (Ex.: https://github.com/medson01/dashboard_ipaseal.git), os arquivos poderão finalmente serem enviados.
+# Após executar os passos anteriores e criar um repositório no site do GitHub.com e obter com isso a URL do repositorio no Git (Ex.: https://github.com/medson01/dashboard_ipaseal.git). Adicionar o repositório onde os arquivos serão gravados no site.
 > git remote add origin https://github.com/medson01/dashboard_ipaseal.git
-> 
-
 Atenção: 
 Atrela o comite ao usuário do commit. É usado para identificar o commit, quem fez:
 > git config --global user.name "medson01"
@@ -40,6 +50,8 @@ Atênção: Caso queira baixar colocando em uma pasta específica com um nome
 da sua escola só digitar:
 > git clone https://github.com/medson01/dashboard_ipaseal.git Nova_pasta
 
+# Para baixar do site e atualizar na pasta local
+> git pull
 
 
 
