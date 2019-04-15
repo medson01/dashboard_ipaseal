@@ -40,10 +40,17 @@
 
 // total de pessoas 
 // contrato_ativo_pessoas_ativa
-    $sql1=pg_query("SELECT COUNT(*)FROM CONTRATO_PESSOA INNER JOIN contrato_contrato ON contrato_contrato.id = contrato_pessoa.CONTRATO_ID WHERE contrato_contrato.ativo  = 't' AND contrato_pessoa.ativo = 't'");     
+  if(!isset($_SESSION["vidas"])){    
+    $sql1=pg_query("SELECT COUNT(*)FROM CONTRATO_PESSOA INNER JOIN contrato_contrato ON contrato_contrato.id = contrato_pessoa.CONTRATO_ID WHERE contrato_contrato.ativo  = 't' AND contrato_pessoa.ativo = 't'");    
+   }
+
 // total de contratos
+  if(!isset($_SESSION["contratos"])){ 
     $sql2=pg_query("SELECT count(*) as ativo FROM CONTRATO_CONTRATO WHERE ATIVO  = 't'");  
+   }
+
 // total de procedimentos
+ if(!isset($_SESSION["consultas_medica"])){   
     $sql_procedimento="SELECT TABELA.BE2_CODPRO AS PROCEDIMENTO, COUNT(*) AS TOTAL FROM 
 (SELECT DISTINCT  BE2_CODPRO, BE2_DESPRO,BE2_DATPRO,BA1_CODINT,BA1_CODEMP,BA1_MATRIC,BA1_TIPREG,BA1_NOMUSR,BA1_CPFUSR,BAU_CODIGO,BAU_NOME,BAU_SIGLCR,BAU_CONREG, BAQ_CODESP,BAQ_DESCRI,BE2_CDPFSO,BE2_NOMSOL, 
 ( SELECT SUM(BD4_VLMED) FROM BD4010 WHERE BD4_CODPRO = BE2_CODPRO) AS VALOR 
@@ -68,12 +75,12 @@ AND
       BE2_CODPRO = '10101012' --> CONSULTA MÉDICA 
 OR    BE2_CODPRO = '10001000' --> CONSULTA ODONTOLOGIA
 OR    BE2_CODPRO = '10102019' --> INTERNAMENTO
+OR    BE2_CODPRO = '50000012' --> PSICOLOGIA
 )
 
 
 AND   BE2_CODPRO NOT LIKE '4%' --> NÃO TABELA CHPM
 AND   BE2_CODPRO NOT LIKE '3%' --> PELE E TECIDO CELULAR SUBCUTÂNEO / CABECA E PESCOSO / MAMAS / SISTEMA MÚSCULO-ESQUELÉTICO E ARTICULAÇÕES
-AND   BE2_CODPRO NOT LIKE '5%' --> TABELA DE COFFITO (FISIOTERAPIA)
 AND   BE2_CODPRO NOT LIKE '6%' --> NÃO TABELA CHPM
 AND   BE2_CODPRO NOT LIKE '7%' --> NÃO TABELA CHPM
 AND   BE2_CODPRO NOT LIKE '8%' --> NÃO TABELA CHPM
@@ -90,107 +97,129 @@ AND   BAQ010.D_E_L_E_T_ <> '*'
 ) 
 AS TABELA
 GROUP BY TABELA.BE2_CODPRO;";
-
+}
 
 
 
 // total de exames
-$sql_exames = "SELECT COUNT (*) AS EXAMES  FROM 
-(SELECT DISTINCT  BE2_CODPRO, BE2_DESPRO,BE2_DATPRO,BA1_CODINT,BA1_CODEMP,BA1_MATRIC,BA1_TIPREG,BA1_NOMUSR,BA1_CPFUSR,BAU_CODIGO,BAU_NOME,BAU_SIGLCR,BAU_CONREG, BAQ_CODESP,BAQ_DESCRI,BE2_CDPFSO,BE2_NOMSOL, 
-( SELECT SUM(BD4_VLMED) FROM BD4010 WHERE BD4_CODPRO = BE2_CODPRO) AS VALOR 
+if(!isset($_SESSION["exames"])){ 
+      $sql_exames = "SELECT COUNT (*) AS EXAMES  FROM 
+      (SELECT DISTINCT  BE2_CODPRO, BE2_DESPRO,BE2_DATPRO,BA1_CODINT,BA1_CODEMP,BA1_MATRIC,BA1_TIPREG,BA1_NOMUSR,BA1_CPFUSR,BAU_CODIGO,BAU_NOME,BAU_SIGLCR,BAU_CONREG, BAQ_CODESP,BAQ_DESCRI,BE2_CDPFSO,BE2_NOMSOL, 
+      ( SELECT SUM(BD4_VLMED) FROM BD4010 WHERE BD4_CODPRO = BE2_CODPRO) AS VALOR 
 
-  FROM BA1010 ,BE2010 , BA3010 , BAU010 , BAQ010 
-WHERE BA1_CONEMP = BE2_CONEMP              
-AND   BA1_CODEMP = BE2_CODEMP
-AND   BA1_MATRIC = BE2_MATRIC 
-AND   BA1_TIPREG = BE2_TIPREG
-AND   BA1_MATRIC = BA3_MATRIC
-AND   BA1_CODEMP = BA3_CODEMP
-AND   BE2_CODRDA = BAU_CODIGO
-AND   BE2_CODESP = BAQ_CODESP
-
-
-AND   BE2_DATPRO BETWEEN '".$ano.$mes."01' AND '".$ano.$mes.$dia."'
-
-AND   BE2_CODRDA <> '000871'   --> RDA GENERICO
-
-AND   BE2_CODPRO <> '10101012' --> CONSULTA MÉDICA
-AND   BE2_CODPRO <> '10001000' --> CONSULTA ODONTOLOGIA
-AND   BE2_CODPRO <> '10102019' --> VISITA HOSPITALAR (PACIENTE INTERNADO - INTERNAMENTO) 
+        FROM BA1010 ,BE2010 , BA3010 , BAU010 , BAQ010 
+      WHERE BA1_CONEMP = BE2_CONEMP              
+      AND   BA1_CODEMP = BE2_CODEMP
+      AND   BA1_MATRIC = BE2_MATRIC 
+      AND   BA1_TIPREG = BE2_TIPREG
+      AND   BA1_MATRIC = BA3_MATRIC
+      AND   BA1_CODEMP = BA3_CODEMP
+      AND   BE2_CODRDA = BAU_CODIGO
+      AND   BE2_CODESP = BAQ_CODESP
 
 
-AND   BE2_CODPRO NOT LIKE '3%' --> PELE E TECIDO CELULAR SUBCUTÂNEO / CABECA E PESCOSO / MAMAS / SISTEMA MÚSCULO-ESQUELÉTICO E ARTICULAÇÕES
-AND   BE2_CODPRO NOT LIKE '5%' --> TABELA DE COFFITO (FISIOTERAPIA)
-AND   BE2_CODPRO NOT LIKE '6%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '7%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '8%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '9%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO <> '20103115' --> ATIVIDADE REFLEXA OU APLICACAO DE TECNICA CINESIOTERAPICA ESPECIFICA                                                         
-AND   BE2_CODPRO <> '20103360' --> PACIENTE COM D.P.O.C. EM ATENDIMENTO AMBULATORIAL NECESSITANDO REEDUCACAO E REABILITACAO RESPIRATORIA
-AND   BE2_CODPRO <> '20103476' --> PATOLOGIA NEUROLOGICA COM DEPENDENCIA DE ATIVIDADES DA VIDA DIARIA                                                           
-AND   BE2_CODPRO <> '20103484' --> PATOLOGIA OSTEOMIOARTICULAR EM UM MEMBRO                         
-AND   BE2_CODPRO <> '20103492' --> PATOLOGIA OSTEOMIOARTICULAR EM DOIS OU MAIS MEMBROS                                                                                            
-AND   BE2_CODPRO <> '20103506' --> PATOLOGIA OSTEOMIOARTICULAR EM UM SEGMENTO DA COLUNA                                                                                       
-AND   BE2_CODPRO <> '20103514' --> PATOLOGIA OSTEOMIOARTICULAR EM DIFERENTES SEGMENTOS DA COLUNA                                                                    
-AND   BE2_CODPRO <> '20103522' --> PATOLOGIAS OSTEOMIOARTICULARES COM DEPENDUNCIA DE ATIVIDADES DA VI                                                             
-AND   BE2_CODPRO <> '20103654' --> RECUPERACAO FUNCIONAL DE DISTURBIOS CRANIO-FACIAIS                                                                                        
-AND   BE2_CODPRO <> '20103727' --> REABILITAþOO  CARDÝACA SUPERVISIONADA. PROGRAMA DE 12 SEMANAS. DUA                                                          
-AND   BE2_CODPRO <> '50000004' --> OFTALMOLOGIA 
+      AND   BE2_DATPRO BETWEEN '".$ano.$mes."01' AND '".$ano.$mes.$dia."'
 
- 
-  
-AND   BE2_STATUS = '1'       
-AND   BE2010.D_E_L_E_T_ <> '*' 
-AND   BA1010.D_E_L_E_T_ <> '*' 
-AND   BA3010.D_E_L_E_T_ <> '*' 
-AND   BAU010.D_E_L_E_T_ <> '*' 
-AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
+      AND   BE2_CODRDA <> '000871'   --> RDA GENERICO
+
+      AND   BE2_CODPRO <> '10101012' --> CONSULTA MÉDICA
+      AND   BE2_CODPRO <> '10001000' --> CONSULTA ODONTOLOGIA
+      AND   BE2_CODPRO <> '10102019' --> VISITA HOSPITALAR (PACIENTE INTERNADO - INTERNAMENTO) 
 
 
+      AND   BE2_CODPRO NOT LIKE '3%' --> PELE E TECIDO CELULAR SUBCUTÂNEO / CABECA E PESCOSO / MAMAS / SISTEMA MÚSCULO-ESQUELÉTICO E ARTICULAÇÕES
+      AND   BE2_CODPRO NOT LIKE '5%' --> TABELA DE COFFITO (FISIOTERAPIA)
+      AND   BE2_CODPRO NOT LIKE '6%' --> NÃO TABELA CHPM
+      AND   BE2_CODPRO NOT LIKE '7%' --> NÃO TABELA CHPM
+      AND   BE2_CODPRO NOT LIKE '8%' --> NÃO TABELA CHPM
+      AND   BE2_CODPRO NOT LIKE '9%' --> NÃO TABELA CHPM
+      AND   BE2_CODPRO <> '20103115' --> ATIVIDADE REFLEXA OU APLICACAO DE TECNICA CINESIOTERAPICA ESPECIFICA                                                         
+      AND   BE2_CODPRO <> '20103360' --> PACIENTE COM D.P.O.C. EM ATENDIMENTO AMBULATORIAL NECESSITANDO REEDUCACAO E REABILITACAO RESPIRATORIA
+      AND   BE2_CODPRO <> '20103476' --> PATOLOGIA NEUROLOGICA COM DEPENDENCIA DE ATIVIDADES DA VIDA DIARIA                                                           
+      AND   BE2_CODPRO <> '20103484' --> PATOLOGIA OSTEOMIOARTICULAR EM UM MEMBRO                         
+      AND   BE2_CODPRO <> '20103492' --> PATOLOGIA OSTEOMIOARTICULAR EM DOIS OU MAIS MEMBROS                                                                                            
+      AND   BE2_CODPRO <> '20103506' --> PATOLOGIA OSTEOMIOARTICULAR EM UM SEGMENTO DA COLUNA                                                                                       
+      AND   BE2_CODPRO <> '20103514' --> PATOLOGIA OSTEOMIOARTICULAR EM DIFERENTES SEGMENTOS DA COLUNA                                                                    
+      AND   BE2_CODPRO <> '20103522' --> PATOLOGIAS OSTEOMIOARTICULARES COM DEPENDUNCIA DE ATIVIDADES DA VI                                                             
+      AND   BE2_CODPRO <> '20103654' --> RECUPERACAO FUNCIONAL DE DISTURBIOS CRANIO-FACIAIS                                                                                        
+      AND   BE2_CODPRO <> '20103727' --> REABILITAþOO  CARDÝACA SUPERVISIONADA. PROGRAMA DE 12 SEMANAS. DUA                                                          
+      AND   BE2_CODPRO <> '50000004' --> OFTALMOLOGIA 
 
-// executar consultas 
- $exames = odbc_exec ($con, $sql_exames);
- $procedimento = odbc_exec ($con, $sql_procedimento);
+      AND   BE2_CODPRO <> '20104294' --> ONCOLOGIA 1ª DOSE
+      AND   BE2_CODPRO <> '20104308' --> ONCOLOGIA SUBSEQUENTE
+       
+        
+      AND   BE2_STATUS = '1'       
+      AND   BE2010.D_E_L_E_T_ <> '*' 
+      AND   BA1010.D_E_L_E_T_ <> '*' 
+      AND   BA3010.D_E_L_E_T_ <> '*' 
+      AND   BAU010.D_E_L_E_T_ <> '*' 
+      AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
+  }
 
-  
-// teste de consulta
+
+
+  if(!isset($_SESSION["vidas"])){  
+
     if (!$sql1) {
         echo "Erro na consulta TOTAL DE VIDAS .<br>";
         exit; 
     }
+     while( $row = pg_fetch_array( $sql1 ) ) {
+         $_SESSION["vidas"] = $row [0] ;
+    }
+  }
+
+  if(!isset($_SESSION["contratos"])){ 
     // teste de consulta
     if (!$sql2) {
         echo "Erro na consulta TOTAL CONTRATOS .<br>";
         exit; 
     }
-     while( $row = pg_fetch_array( $sql1 ) ) {
-         $t_vidas= $row [0] ;
-    }
-
      while( $row = pg_fetch_array( $sql2 ) ) {
-        $t_contratos= $row [0] ;
+        $_SESSION["contratos"] = $row [0] ;
      }
+  }
+
+
+ if(!isset($_SESSION["consultas_medica"])){  
+
+ // executar consultas 
+ $procedimento = odbc_exec ($con, $sql_procedimento);
+
+
+    while ($rows = odbc_fetch_object($procedimento)) { 
+    
+        if(10101012 == $rows->PROCEDIMENTO){
+          $_SESSION["consultas_medica"] = $rows->TOTAL;
+         
+        }
+        if(10001000 == $rows->PROCEDIMENTO){
+          $_SESSION["consultas_odont"] = $rows->TOTAL;
+          
+        }
+        if(10102019 == $rows->PROCEDIMENTO){
+          $_SESSION["internamento"] = $rows->TOTAL;
+         
+        }
+
+        if(50000012 == $rows->PROCEDIMENTO){
+          $_SESSION["psicologia"] = $rows->TOTAL;
+         
+        }
+     }
+   }
+
+ if(!isset($_SESSION["exames"])){ 
+
+// executar consultas 
+ $exames = odbc_exec ($con, $sql_exames);
 
     while ($rows = odbc_fetch_object($exames)) { 
     
-        $exame = $rows->EXAMES;
+        $_SESSION["exames"] = $rows->EXAMES;
      }
-    while ($rows = odbc_fetch_object($procedimento)) { 
-    
-      if(10101012 == $rows->PROCEDIMENTO){
-        $t_consultas_medica = $rows->TOTAL;
-      }
-      if(10001000 == $rows->PROCEDIMENTO){
-        $t_consultas_odont = $rows->TOTAL;
-      }
-      if(10102019 == $rows->PROCEDIMENTO){
-        $t_internamento = $rows->TOTAL;
-      }
-
-     }
-
-
-
+ }
 
   pg_close($conexao);
   odbc_close($con);
@@ -277,8 +306,8 @@ AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
                   </li>
                   <li><a><i class="fa fa-bar-chart-o"></i> Gráficos Específico <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="../../dashboard_ipaseal/production/chartjs.html">Financeiros</a></li>
-                      <li><a href="../../dashboard_ipaseal/production/grafico_saude.php">Gestão Saúde</a></li>
+                      <li><a href="../../dashboard_ipaseal/graficos/grafico_financeiro.php">Financeiros</a></li>
+                      <li><a href="../../dashboard_ipaseal/graficos/grafico_saude.php">Gestão Saúde</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i> Tabela do Plano <span class="fa fa-chevron-down"></span></a>
@@ -436,7 +465,7 @@ AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
               <div class="count blue">
 
               <?php 
-                  echo (number_format ($t_contratos  , 0 , ' , ' ,  '.'));
+                  echo (number_format ($_SESSION["contratos"]  , 0 , ' , ' ,  '.'));
               ?>
 
 
@@ -450,7 +479,7 @@ AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
               <div class="count blue">
               <?php 
               // resultado 
-                  echo (number_format ($t_vidas  , 0 , ' , ' ,  '.'));
+                  echo (number_format ($_SESSION["vidas"]  , 0 , ' , ' ,  '.'));
 
               ?>
               </div>
@@ -467,7 +496,7 @@ AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
               <?php 
               // resultado 
                   error_reporting(0);
-                  echo (number_format ($t_consultas_medica  , 0 , ' , ' ,  '.'));
+                  echo  $_SESSION["consultas_medicas"] = (number_format ( $_SESSION["consultas_medica"]   , 0 , ' , ' ,  '.'));
 
               ?>
 
@@ -490,7 +519,7 @@ AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
 
               <?php 
               // resultado 
-                  echo (number_format ($t_consultas_odont  , 0 , ' , ' ,  '.'));
+                  echo  $_SESSION["consultas_odont"] = (number_format ($_SESSION["consultas_odont"]  , 0 , ' , ' ,  '.'));
                   
 
               ?>
@@ -509,7 +538,7 @@ AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
               <div class="count green">
               <?php 
               // resultado 
-                  echo (number_format ($exame  , 0 , ' , ' ,  '.'));
+                  echo number_format ($_SESSION["exames"]  , 0 , ' , ' ,  '.');
                   
 
               ?>
@@ -528,7 +557,7 @@ AND   BAQ010.D_E_L_E_T_ <> '*') AS VAL;";
               <div class="count green">
               <?php 
               // resultado 
-                  echo (number_format ($t_internamento  , 0 , ' , ' ,  '.'));
+                  echo $_SESSION["Internamento"] = (number_format ($_SESSION["Internamento"] , 0 , ' , ' ,  '.'));
                   
 
               ?>

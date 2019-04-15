@@ -56,7 +56,7 @@ $(function () {
             
             
             
-            
+  if(!isset($_SESSION["ativo"])){             
    //contrato_ativo_pessoas_ativa
 			$sql1=pg_query("SELECT count(*)FROM CONTRATO_PESSOA INNER JOIN contrato_contrato ON contrato_contrato.id = contrato_pessoa.CONTRATO_ID WHERE contrato_contrato.ativo  = 't' AND contrato_pessoa.ativo = 't'");
    //contrato_ativo_pessoas_bloqueada
@@ -75,13 +75,13 @@ $(function () {
              }
    //PEGAR VALOR DA CONSULTAS        
             while( $row = pg_fetch_array( $sql1 ) ) {
-                $ativo = $row [0] ;
+                $_SESSION["ativo"] = $row [0] ;
             }
             while( $row = pg_fetch_array( $sql2 ) ) {
-                $bloqueado = $row [0] ;
+                $_SESSION["bloqueado"] = $row [0] ;
             }
-            
-            $ressult = array("Ativas"=>$ativo, "Bloqueadas"=>$bloqueado);
+    }       
+            $ressult = array("Ativas"=>$_SESSION["ativo"], "Bloqueadas"=>$_SESSION["bloqueado"]);
                         
             foreach($ressult as $indice=> $valor){	
             

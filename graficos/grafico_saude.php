@@ -15,18 +15,8 @@
     $dia = date("d");
     $mes = date("m");
     $mess = date('M');
+    $ano = date("Y");  
 
-
-    if (isset($_GET['ano'])) {
-      $_SESSION["ano"] = $_GET['ano']; 
-      $_SESSION["notquery"] = "0";
-
-    }else{
-      
-     $_SESSION['ano'] = date('Y');
-     $_SESSION["notquery"] = "1";
-    } 
-   
       $mes_extenso = array(
         'Jan' => 'Janeiro',
         'Feb' => 'Fevereiro',
@@ -143,7 +133,7 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-sitemap"></i> Dw Ipaseal <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="#level1_1">Geral</a>
+                        <li><a href="../../dashboard_ipaseal/production/Dw_geral.php">Geral</a>
                         <li><a href="#level1_1">Financeiros</a>
                         <li><a href="#level1_2">Gestão Saúde</a>
                         </li>
@@ -186,21 +176,17 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    Perfil
+                    <img src="images/img.jpg" alt="">Perfil
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                    
-				              <li>
-                          <a href="javascript:;"> Profile </a>
-                      </li>
-                    <?php  
-                          if("administrador"==$_SESSION["perfil"]){
-                          echo "<li><a href='./files/principal_mudar_senha.php'>Cadastro usuários</a></li>";}
-                    ?> 
-                    <li>
-                        <a href="javascript:;">Help</a>
-                    </li>
+				   <li><a href="javascript:;"> Profile </a></li>
+                  <?php  
+                  if("administrador"==$_SESSION["perfil"]){
+                      echo "<li><a href='./files/principal_mudar_senha.php'>Cadastro usuários</a></li>";}
+                  ?> 
+                    <li><a href="javascript:;">Help</a></li>
 					
                     <li><a href="../logout.php"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                   </ul>
@@ -214,7 +200,7 @@
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                     <li>
                       <a>
-                        <span class="image"></span>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -226,7 +212,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"></span>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -238,7 +224,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"></span>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -250,7 +236,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"></span>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -270,40 +256,6 @@
                     </li>
                   </ul>
                 </li>
-
-
-                <li class="">
-                  <a href="#" class="user-profile" >
-                    <select id="ano" class="form-control"  onchange="adiciona()">
-                      <option> ... </option>
-                      <option value="2019">2019</option>
-                      <option value="2018">2018</option>
-                      <option value="2017">2017</option>
-                      <option value="2016">2016</option>
-                    </select>
-                 </a>
-                </li>
-
-               <script>
-                  function adiciona() {
-                    var x = document.getElementById("ano").value;
-                    hoje = new Date();
-                    ano = hoje.getFullYear();
-                    if(x == ano){
-                        window.location.href='dw_geral.php';
-                    }else{
-                        window.location.href='dw_geral.php?ano='+ x;
-                    }
-                }
-      
-                </script>
-
-                <li class="">
-                  <a href="#" class="user-profile" >
-                    Ano
-                  </a>
-                </li>
-
               </ul>
             </nav>
           </div>
@@ -345,70 +297,72 @@
 			  
 		-->	  
 
-              <div class="row"> 
+              <div class="row">
 
+                
                   <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="x_panel">
+
                       <div class="x_content">
-                          <iframe src="../graficos/consul_medicas_seletivas.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>
+                          <iframe src="../graficos/top10_credenciado_x_qtdexames.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>
                       </div>
                     </div>
-                  </div>
+              </div>
 
 
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                   
+              <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="x_panel">
                       <div class="x_content">                       
-                             <iframe src="../graficos/consul_odont_seletivas.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>       
+                          
+                             <iframe src="../graficos/top10_usuario_x_qtdexames.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>                                              
                       </div>
-                    </div>
+                     </div>
                   </div>
-
-              </div>
+                  </div>
 			  
 			  
-		          <div class="row">
+		      <!-- <div class="row">
 
+                
                   <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="x_panel">
+
                       <div class="x_content">
                           <iframe src="../graficos/psicologia.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>
                       </div>
                     </div>
-                  </div>
-
-
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_content">                       
-                             <iframe src="../graficos/exames.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>        
-                      </div>
-                    </div>
-                  </div>
-
               </div>
 
-              <div class="row">
 
                   <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="x_panel">
-                      <div class="x_content">
-                          <iframe src="../graficos/internacao.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>
-                      </div>
-                    </div>
-                  </div>
 
-<!--
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="x_panel">
                       <div class="x_content">                       
-                             <iframe src="../graficos/exames.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>        
+                          
+                             <iframe src="../graficos/exames.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>                                              
                       </div>
                     </div>
                   </div>
-                  
               </div>
--->						
+
+	
+
+		<div class="row">
+
+
+              <div class="col-md-12">
+                <div class="x_panel tile fixed_height_320 overflow_hidden">
+
+                   <div class="x_content">
+						              <iframe src="../graficos/qtd_usuarios_plano.php" height="280" width="100%" scrolling="no" style="border:none;"></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+	
+	-->
+						
     </p>
     
             
@@ -471,8 +425,6 @@
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
-
-
 	
   </body>
 </html>

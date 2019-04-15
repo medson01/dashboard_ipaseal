@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
     	// BANCO DE DADOS
 			
 	include("../conexion/conn_sqlsrv.php");
@@ -10,7 +12,8 @@
 
     $dia = date("d");
     $mes = date("m");
-    $ano = date("Y");  
+
+    $ano = $_SESSION["ano"];
 	
 	
 
@@ -49,69 +52,22 @@
 								ano = '".$ano."'
 							 	and  codigo = '10001000'");
 								
-	   $sql02="SELECT TABELA.BE2_CODPRO AS CONSULTA, COUNT(*) AS TOTAL FROM 
-(SELECT DISTINCT  BE2_CODPRO, BE2_DESPRO,BE2_DATPRO,BA1_CODINT,BA1_CODEMP,BA1_MATRIC,BA1_TIPREG,BA1_NOMUSR,BA1_CPFUSR,BAU_CODIGO,BAU_NOME,BAU_SIGLCR,BAU_CONREG, BAQ_CODESP,BAQ_DESCRI,BE2_CDPFSO,BE2_NOMSOL, 
-( SELECT SUM(BD4_VLMED) FROM BD4010 WHERE BD4_CODPRO = BE2_CODPRO) AS VALOR 
-
-  FROM BA1010 ,BE2010 , BA3010 , BAU010 , BAQ010 
-WHERE BA1_CONEMP = BE2_CONEMP              
-AND   BA1_CODEMP = BE2_CODEMP
-AND   BA1_MATRIC = BE2_MATRIC 
-AND   BA1_TIPREG = BE2_TIPREG
-AND   BA1_MATRIC = BA3_MATRIC
-AND   BA1_CODEMP = BA3_CODEMP
-AND   BE2_CODRDA = BAU_CODIGO
-AND   BE2_CODESP = BAQ_CODESP
 
 
-AND   BE2_DATPRO BETWEEN '".$ano.$mes."01' AND '".$ano.$mes.$dia."'
 
-AND   BE2_CODRDA <> '000871'   --> RDA GENERICO
-
-AND   BE2_CODPRO = '10001000' --> CONSULTA MÉDICA 
-AND   BE2_CODPRO NOT LIKE '4%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '3%' --> PELE E TECIDO CELULAR SUBCUTÂNEO / CABECA E PESCOSO / MAMAS / SISTEMA MÚSCULO-ESQUELÉTICO E ARTICULAÇÕES
-AND   BE2_CODPRO NOT LIKE '5%' --> TABELA DE COFFITO (FISIOTERAPIA)
-AND   BE2_CODPRO NOT LIKE '6%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '7%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '8%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '9%' --> NÃO TABELA CHPM
- 
-  
-AND   BE2_STATUS = '1'       
-AND   BE2010.D_E_L_E_T_ <> '*' 
-AND   BA1010.D_E_L_E_T_ <> '*' 
-AND   BA3010.D_E_L_E_T_ <> '*' 
-AND   BAU010.D_E_L_E_T_ <> '*' 
-AND   BAQ010.D_E_L_E_T_ <> '*'
-
-
-) 
-AS TABELA
-GROUP BY TABELA.BE2_CODPRO;";
-
-
-		// executar consultas 
-		 $consultas = odbc_exec ($con, $sql02);		 
     
         //teste de consulta
         if (!$sql01) {
         echo "Erro na consulta banco DW.<br>";  
         }
-		//teste de consulta
-        if (!$sql02) {
-        echo "Erro na consulta banco TOTVs.<br>";  
-        }
-        
-		while ($rows = odbc_fetch_object($consultas)) { 
-		
-			$constotal = $rows->TOTAL;
-		 }
-
+	
+		if($_SESSION["notquery"] <> "0"){
+			$constotal = $_SESSION["consultas_odont"];
+		} 
 		 
         //Fechar conexao
         pg_close($conexao);
-        odbc_close($con);
+     
         
 
 ?>
@@ -253,9 +209,9 @@ $(function () {
                     echo "[".$qtd[$y] ."],";
                 }      
         }
-// alteração
+          if($_SESSION["notquery"] <> "0"){
                 echo "[".$constotal."],";
-
+          }
 // ***           
 ?>    
             ]
@@ -272,7 +228,7 @@ $(function () {
 </br>
 <center><span style="font-size:24px"> Consultas médicas odontológicas &nbsp;<?php echo $ano; ?></span></center>
 <center>  
-<table  class="table thead-light" style="font-size:20px">
+<table  class="table thead-light" style="font-size:10px">
   <tr>
   
   <?php
@@ -295,9 +251,11 @@ $(function () {
                      
   }     
   		
-// Alteração     
-       echo "<td><font color='blue'>".$mes_extenso[date("m")]."</font></td>"; 
-// ***
+      if($_SESSION["notquery"] <> "0"){    
+             echo "<td><font color='blue'>".$mes_extenso[date("m")]."</font></td>"; 
+      }
+
+
   		 echo "<td>Total</td>" ;
 		 $y=$y-1;
 
@@ -326,10 +284,11 @@ $(function () {
 			     
         }
 		
-		echo "<td><font color='blue'>".$constotal."</font></td>";
-		
+    if($_SESSION["notquery"] <> "0"){
+		        echo "<td><font color='blue'>".$constotal."</font></td>";
+		}
     
-    echo "<td>".$t."</td>" ;
+            echo "<td>".$t."</td>" ;
     // =================
   ?>
   </tr>

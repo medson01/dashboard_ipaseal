@@ -43,8 +43,9 @@ $(function () {
 							F					V					=> 			CANCELADO
 							F					F					=>			CANCELADO
 
-
+        
 		*/
+        if(!isset($_SESSION["pessoas_ativas"])){                        
         //TOTAL DE PESSOAS ATIVAS / CONTRATO ATIVO/ COM ODONTOL�GICO
         $sql1=pg_query($conexao,"SELECT count(*)FROM CONTRATO_PESSOA INNER JOIN contrato_contrato ON contrato_contrato.id = contrato_pessoa.CONTRATO_ID WHERE contrato_contrato.ativo  = 't' AND contrato_contrato.plano_odontologico = 't' AND contrato_pessoa.ativo = 't'");
 		//TOTAL DE PESSOAS ATIVAS / CONTRATO ATIVO/ SEM ODONTOL�GICO
@@ -98,33 +99,34 @@ $(function () {
         
 		
         while( $row = pg_fetch_array( $sql1 ) ) {
-            $comodonto= $row [0] ;
+        $_SESSION["comodonto"] = $row [0] ;
         }
         while( $row = pg_fetch_array( $sql2 ) ) {
-            $semodonto = $row [0] ;
+        $_SESSION["semodonto"] = $row [0] ;
         }
         while( $row = pg_fetch_array( $sql3 ) ) {
-        $masculino = $row [0] ;
+        $_SESSION["masculino"] = $row [0] ;
         }
         while( $row = pg_fetch_array( $sql4 ) ) {
-        $feminino = $row [0] ;
+        $_SESSION["feminino"] = $row [0] ;
         }
         while( $row = pg_fetch_array( $sql5 ) ) {
-        $agregado = $row [0] ;
+        $_SESSION["agregado"] = $row [0] ;
         }
         while( $row = pg_fetch_array( $sql6 ) ) {
-        $dependentes = $row [0] ;
+        $_SESSION["dependentes"] = $row [0] ;
         }
 		while( $row = pg_fetch_array( $sql7 ) ) {
-        $pessoas_ativas = $row [0] ;
+        $_SESSION["pessoas_ativas"] = $row [0] ;
         }
 		while( $row = pg_fetch_array( $sql8 ) ) {
-        $pessoas_titular = $row [0] ;
+        $_SESSION["pessoas_titular"] = $row [0] ;
         }
 	    
+        }
        //$pessoas_ativas = $pessoas_ativas + $agregado;
 			
-        $ressult = array("Pessoas ativas"=>$pessoas_ativas, "Titular"=>$pessoas_titular,"Dependentes"=>$dependentes,"Agregados"=>$agregado, "Masculino"=>$masculino, "Feminino"=>$feminino,"Com odonto"=>$comodonto, "Sem odonto"=>$semodonto);
+        $ressult = array("Pessoas ativas"=>$_SESSION["pessoas_ativas"], "Titular"=>$_SESSION["pessoas_titular"],"Dependentes"=>$_SESSION["dependentes"],"Agregados"=>$_SESSION["agregado"], "Masculino"=>$_SESSION["masculino"], "Feminino"=>$_SESSION["feminino"],"Com odonto"=>$_SESSION["comodonto"], "Sem odonto"=>$_SESSION["semodonto"]);
 
         foreach($ressult as $indice=> $valor){
 			

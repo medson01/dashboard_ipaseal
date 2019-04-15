@@ -1,113 +1,74 @@
 <?php
 
-//BANCO DE DADOS
-require_once("../conexion/conn_sqlsrv.php");
-           
-// DATA
+	require_once("../conexion/conexion.php");
 
-       date_default_timezone_set('America/Maceio');
+		$sql=pg_query($conexao,"SELECT 
+								
+								faixaetaria , count(id) as qtd
+								
+								FROM 
+								
+								(SELECT 
+								
+								CONTRATO_PESSOA.id, (case 
+										when extract(year from age(data_nascimento)) between 0 and 18 then '0 a 18'
+										when extract(year from age(data_nascimento)) between 19 and 25 then '19 a 25'
+										when extract(year from age(data_nascimento)) between 26 and 30 then '26 a 30'
+										when extract(year from age(data_nascimento)) between 31 and 35 then '31 a 35'
+										when extract(year from age(data_nascimento)) between 36 and 40 then '36 a 40'
+										when extract(year from age(data_nascimento)) between 41 and 45 then '41 a 45'
+										when extract(year from age(data_nascimento)) between 46 and 50 then '46 a 50'
+										when extract(year from age(data_nascimento)) between 51 and 55 then '51 a 55'
+										when extract(year from age(data_nascimento)) between 56 and 60 then '56 a 60'
+										when extract(year from age(data_nascimento)) between 61 and 65 then '61 a 65'
+										when extract(year from age(data_nascimento)) between 66 and 70 then '66 a 70'
+										when extract(year from age(data_nascimento)) between 71 and 75 then '71 a 75'
+										when extract(year from age(data_nascimento)) between 76 and 80 then '76 a 80'
+										when extract(year from age(data_nascimento)) between 81 and 85 then '81 a 85'
+										when extract(year from age(data_nascimento)) between 86 and 90 then '86 a 90'
+										when extract(year from age(data_nascimento)) between 91 and 95 then '91 a 95'
+										when extract(year from age(data_nascimento)) between 96 and 100 then '96 a 100'
+										when extract(year from age(data_nascimento)) > 100 then '> 100'
+										
+									end) AS FAIXAETARIA
+									
+								
+								FROM 
+								
+									
+									CONTRATO_PESSOA
+								
+									INNER JOIN CONTRATO_CONTRATO ON  CONTRATO_CONTRATO.id = CONTRATO_PESSOA.contrato_id
+								
+									WHERE 
+								
+									CONTRATO_CONTRATO.ativo = 't'
+									AND CONTRATO_PESSOA.ativo = 't'
+									
+								
+									) as TABELA
+								
+									group by faixaetaria
+									order by faixaetaria");
 
-    $dia = date("d");
-    $mes = date("m");
-    $ano = date("Y"); 
-
-
-//RANK CREDENCIADOS: CONSULTA CREDENCIADOS, QTD PROCESSOS, PERÍODO, VALOR
-        $sql="SELECT TOP 10 BAU_NOME AS CREDENCIADO, SUM (BE2_QTDPRO) AS PROCEDIMENTOS, CONVERT(DECIMAL(10,2),SUM (VALOR)) AS VALOR FROM 
-(SELECT DISTINCT  BE2_CODPRO, BE2_DATPRO,BA1_CODINT,BA1_CODEMP,BA1_MATRIC,BA1_TIPREG,BAU_CODIGO,BAU_NOME, BE2_QTDPRO,
-( SELECT SUM(BD4_VLMED) FROM BD4010 WHERE BD4_CODPRO = BE2_CODPRO) AS VALOR 
-
-    FROM BA1010 ,BE2010 , BA3010 , BAU010 , BAQ010 
-WHERE BA1_CONEMP = BE2_CONEMP                      
-AND   BA1_CODEMP = BE2_CODEMP
-AND   BA1_MATRIC = BE2_MATRIC 
-AND   BA1_TIPREG = BE2_TIPREG
-AND   BA1_MATRIC = BA3_MATRIC
-AND   BA1_CODEMP = BA3_CODEMP
-AND   BE2_CODRDA = BAU_CODIGO
-AND   BE2_CODESP = BAQ_CODESP
-
-
-AND   BE2_DATPRO BETWEEN '".$ano.$mes."01' AND '".$ano.$mes.$dia."'
-
-
-AND   BE2_CODPRO <> '10101012' --> CONSULTA MÉDICA
-AND   BE2_CODPRO <> '10001000' --> CONSULTA ODONTOLOGIA
-
-AND   BE2_CODPRO <> '10102019' --> VISITA HOSPITALAR (INTERNAMENTO - PACIENTE INTERNADO) 
-
--- AND   BE2_CODPRO <> '50000012' --> SESSÃO DE PSICOLOGIA
--- AND   BE2_CODPRO <> '50000020' --> SESSÃO DE NUTRIÇÃO
--- AND   BE2_CODPRO <> '50000039' --> SESSÃO DE FONOAUDIOLOGIA 
-
-AND   BE2_CODPRO NOT LIKE '3%' --> PELE E TECIDO CELULAR SUBCUTÂNEO / CABECA E PESCOSO / MAMAS / SISTEMA MÚSCULO-ESQUELÉTICO E ARTICULAÇÕES
-AND   BE2_CODPRO NOT LIKE '5%' --> TABELA DE COFFITO (FISIOTERAPIA)
-AND   BE2_CODPRO NOT LIKE '6%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '7%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '8%' --> NÃO TABELA CHPM
-AND   BE2_CODPRO NOT LIKE '9%' --> NÃO TABELA CHPM
-
-AND   BE2_CODPRO <> '20103115' --> ATIVIDADE REFLEXA OU APLICACAO DE TECNICA CINESIOTERAPICA ESPECIFICA                                                                                                                                                                  
-AND   BE2_CODPRO <> '20103360' --> PACIENTE COM D.P.O.C. EM ATENDIMENTO AMBULATORIAL NECESSITANDO REEDUCACAO E REABILITACAO RESPIRATORIA                                                                                                                                 
-AND   BE2_CODPRO <> '20103476' --> PATOLOGIA NEUROLOGICA COM DEPENDENCIA DE ATIVIDADES DA VIDA DIARIA                                                                                                                                                                    
-AND   BE2_CODPRO <> '20103484' --> PATOLOGIA OSTEOMIOARTICULAR EM UM MEMBRO                                                                                                                                                                                              
-AND   BE2_CODPRO <> '20103492' --> PATOLOGIA OSTEOMIOARTICULAR EM DOIS OU MAIS MEMBROS                                                                                                                                                                                   
-AND   BE2_CODPRO <> '20103506' --> PATOLOGIA OSTEOMIOARTICULAR EM UM SEGMENTO DA COLUNA                                                                                                                                                                                  
-AND   BE2_CODPRO <> '20103514' --> PATOLOGIA OSTEOMIOARTICULAR EM DIFERENTES SEGMENTOS DA COLUNA                                                                                                                                                                         
-AND   BE2_CODPRO <> '20103522' --> PATOLOGIAS OSTEOMIOARTICULARES COM DEPENDUNCIA DE ATIVIDADES DA VI                                                                                                                                                                    
-AND   BE2_CODPRO <> '20103654' --> RECUPERACAO FUNCIONAL DE DISTURBIOS CRANIO-FACIAIS                                                                                                                                                                                    
-AND   BE2_CODPRO <> '20103727' --> REABILITAþOO  CARDÝACA SUPERVISIONADA. PROGRAMA DE 12 SEMANAS. DUA                                                                                                                                                                    
-
- 
-AND   BE2_CODRDA <> '000871'   --> RDA GENERICO  
-AND   BA3_CODPLA = '0005'      --> COPARTICIPAÇÃO
-AND   BE2_STATUS = '1'         
-AND   BE2010.D_E_L_E_T_ <> '*' 
-AND   BA1010.D_E_L_E_T_ <> '*' 
-AND   BA3010.D_E_L_E_T_ <> '*' 
-AND   BAU010.D_E_L_E_T_ <> '*' 
-AND   BAQ010.D_E_L_E_T_ <> '*' 
-
-) AS TABELA
-GROUP BY BAU_NOME
-ORDER BY PROCEDIMENTOS DESC";
-        
-// executar consultas 
-         $consultas = odbc_exec ($con, $sql);      
-
-//teste de consulta
-        if (!$sql) {
-        echo "Erro na consulta banco TOTVs.<br>";  
-        }
-        $x=1;
-        while ($rows = odbc_fetch_object($consultas)) { 
-        
-            $credenciado[$x] = $rows -> CREDENCIADO;
-            $qtd_proc[$x] = $rows -> PROCEDIMENTOS;
-            $valor[$x] = $rows -> VALOR;
-
-            
-            $x++;
-
-         }
-
-     arsort($valor);
-         
-
-print_r($valor)."</br>";
-
-
-            foreach($valor as $key => $val)
-            {
-              echo $credenciado[$key];  
-            }
-
-            foreach($valor as $key => $val){
-                        
-                         echo "[".$val."],"; 
-            }
 
 //Fechar conexao
-        odbc_close($con);
+		pg_close($conexao);
 
-?>
+		$x = 0;
+
+       while($registro = pg_fetch_assoc($sql)){
+     		echo $registro["faixaetaria"]." = <br>";
+     		$z[$x] = $registro["qtd"];
+
+     		$x++;
+    }
+    
+  
+      for ($i=0; $i < $x; $i++) { 
+      
+       			 echo $z[$i]."<br>";                  
+
+            }
+
+?>			

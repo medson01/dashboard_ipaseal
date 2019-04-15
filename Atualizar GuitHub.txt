@@ -1,3 +1,9 @@
+
+-- Colocar pasta de origin
+git init
+
+-- atualizar e comitar repositório já configurado na pasta e existe no site
+
 git add --all
 git commit -m time
 git remote add origin https://github.com/medson01/dashboard_ipaseal.git

@@ -36,6 +36,7 @@ $(function () {
 <?php
 
         //contrato ativo
+    if(!isset($_SESSION["ativo"])){
         $sql1=pg_query($conexao,"SELECT count(*) as ativo FROM CONTRATO_CONTRATO WHERE ATIVO  = 't'");
 		//contrato broqueado
 		$sql2=pg_query($conexao,"SELECT count(*) as bloqueados FROM CONTRATO_CONTRATO WHERE ATIVO  = 't' AND BLOQUEADO = 't'");
@@ -57,20 +58,20 @@ $(function () {
 		pg_close($conexao);
 		
         while( $row = pg_fetch_array( $sql1 ) ) {
-            $ativo = $row [0] ;
+             $_SESSION["ativo"]  = $row [0] ;
         }
         while( $row = pg_fetch_array( $sql2 ) ) {
-            $bloqueado = $row [0] ;
+            $_SESSION["bloqueado"] = $row [0] ;
         }
         while( $row = pg_fetch_array( $sql3 ) ) {
-        $cancelado = $row [0] ;
+            $_SESSION["cancelado"] = $row [0] ;
         }
-	    
+	}
        // $total = $ativo + $bloqueado;
 			
        // $ressult = array("Total geral"=>$total,"Ativo"=>$ativo, "Bloqueado"=>$bloqueado, "Cancelado"=>$cancelado);
 		
-	   $ressult = array("Ativo"=>$ativo, "Bloqueado"=>$bloqueado, "Cancelado"=>$cancelado);
+	   $ressult = array("Ativo"=>$_SESSION["ativo"], "Bloqueado"=>$_SESSION["bloqueado"], "Cancelado"=>$_SESSION["cancelado"]);
 
         foreach($ressult as $indice=> $valor){
 			

@@ -116,8 +116,8 @@
                   </li>
                   <li><a><i class="fa fa-bar-chart-o"></i> Gráficos Específico <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="chartjs.html">Financeiros</a></li>
-                      <li><a href="chartjs2.html">Gestão Saúde</a></li>
+                      <li><a href="../../dashboard_ipaseal/graficos/grafico_financeiro.php">Financeiros</a></li>
+                      <li><a href="../../dashboard_ipaseal/graficos/grafico_saude.php">Gestão Saúde</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i> Tabela do Plano <span class="fa fa-chevron-down"></span></a>
@@ -304,26 +304,25 @@
                     <div class="x_panel">
 
                       <div class="x_content">
-                          <iframe src="../graficos/top10_credenciado_x_qtdexames.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>
+                          <iframe src="../graficos/qtd_faixa_etaria_barr.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>
                       </div>
                     </div>
               </div>
 
 
-                  <!--  
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                   
+              <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="x_panel">
                       <div class="x_content">                       
                           
-                             <iframe src="../graficos/top10_credenciado_x_valorexames.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>                                              
+                             <iframe src="../graficos/qtd_faixa_etaria_pizz.php" height="400" width="100%" scrolling="no" style="border:none;"></iframe>                                              
                       </div>
                      </div>
                   </div>
-                  -->
-              </div>
+                  </div>
 			  
 			  
-		<!-- <div class="row">
+		      <!-- <div class="row">
 
                 
                   <div class="col-md-6 col-sm-6 col-xs-12">
@@ -347,7 +346,7 @@
                   </div>
               </div>
 
-	<!--
+	
 
 		<div class="row">
 

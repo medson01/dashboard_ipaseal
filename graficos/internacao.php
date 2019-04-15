@@ -49,7 +49,7 @@ session_start();
 								inner join dim_tempo on dim_tempo.id_tempo = fato_procedimento.id_tempo 
 							   where
 								ano = '".$ano."'
-							 	and  codigo = '50000012'");
+							 	and  codigo = '10102019'");
 								
 	  
 
@@ -63,7 +63,7 @@ session_start();
 
 
 		if($_SESSION["notquery"] <> "0"){
-			$constotal = $_SESSION["psicologia"];
+			$constotal = $_SESSION["Internamento"];
     }
 
 		 
@@ -229,7 +229,7 @@ if($_SESSION["notquery"] <> "0"){
 
 </br>
 </br>
-<center><span style="font-size:24px"> Sessões psicológicas &nbsp;<?php echo $ano; ?></span></center>
+<center><span style="font-size:24px"> Internamentos &nbsp;<?php echo $ano; ?></span></center>
 <center>  
 <table  class="table thead-light" style="font-size:10px">
   <tr>
@@ -301,7 +301,7 @@ if($_SESSION["notquery"] <> "0"){
   if($b > $a) {
   
   $sub = -($a-$b);
-  echo "Houve um acréscimo de <font color='red' size='6'>&nbsp;".$sub."&nbsp;</font> nas SESSÕES PSICOLOGICAS entre os meses de <font color='red' size='6'>&nbsp;".$aa; 
+  echo "Houve um acréscimo de <font color='red' size='6'>&nbsp;".$sub."&nbsp;</font> nos INTERNAMENTOS entre os meses de <font color='red' size='6'>&nbsp;".$aa; 
   
   echo "&nbsp;</font> a &nbsp; <font color='red' size='6'>".$bb."</font>";
  } 
@@ -309,7 +309,7 @@ if($_SESSION["notquery"] <> "0"){
 
   if($b < $a){
     $sub = -($a-$b);
-  echo "Houve uma redução de <font color='red' size='6'>&nbsp;".$sub."&nbsp;</font> nas SESSÕES PSICOLOGICAS  entre os meses de <font color='red' size='6'>&nbsp;".$aa; 
+  echo "Houve uma redução de <font color='red' size='6'>&nbsp;".$sub."&nbsp;</font> nos INTERNAMENTOS  entre os meses de <font color='red' size='6'>&nbsp;".$aa; 
   $y=$y+1;
   echo "&nbsp;</font> a &nbsp; <font color='red' size='6'>".$bb."</font>";
   
